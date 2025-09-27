@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import socket from "../socket";
+import socket from "../soket";
+import { useNavigate } from "react-router-dom";
 
 export default function Chat() {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
 
+  const navigate = useNavigate();
   useEffect(() => {
     socket.on("receiveMessage", (msg) => {
       setChat((prev) => [...prev, msg]);
@@ -18,6 +20,9 @@ export default function Chat() {
       setMessage("");
     }
   };
+  const handleLogout = () => {
+    navigate("/");
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -28,11 +33,16 @@ export default function Chat() {
           <li className="py-2 px-3 hover:bg-gray-200 rounded">User 1</li>
           <li className="py-2 px-3 hover:bg-gray-200 rounded">User 2</li>
         </ul>
+        <button className="py-2 px-3 fixed-bottom" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
 
       {/* Chat Box */}
       <div className="flex flex-col flex-1">
-        <div className="bg-blue-500 text-white px-4 py-3 font-bold">Global Chat</div>
+        <div className="bg-blue-500 text-white px-4 py-3 font-bold">
+          Global Chat
+        </div>
 
         <div className="flex-1 p-4 overflow-y-auto space-y-3">
           {chat.map((m, i) => (
